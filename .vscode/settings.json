@@ -1,0 +1,7 @@
+{
+    "python.analysis.extraPaths": [
+        "/Users/joluguz/.vscode/extensions/ms-security.ms-sentinel-2.4.0/python"
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
+}

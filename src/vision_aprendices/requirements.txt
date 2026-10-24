@@ -1,0 +1,64 @@
+import os
+from PIL import Image
+from ultralytics import YOLO
+
+
+class SenaVisionProcessor:
+
+    def __init__(
+        self,
+        model_path: str = "data/model/yolov8n.pt",
+    ):
+        self.model = YOLO(model_path)
+        self.dir_aprendices = "data/raw/aprendices"
+
+    def obtener_lista_aprendices(self) -> dict:
+        """Escanea el directorio y extrae metadatos base de forma dinámica."""
+        aprendices = {}
+        if not os.path.exists(self.dir_aprendices):
+            return aprendices
+
+        for archivo in os.listdir(self.dir_aprendices):
+            if archivo.lower().endswith(
+                (".png", ".jpg", ".jpeg")
+            ):
+                nombre_limpio = (
+                    archivo.replace("Aprendiz_", "")
+                    .replace("_CC", "")
+                    .replace(".jpg", "")
+                    .replace(".png", "")
+                    .replace("_", " ")
+                )
+
+                ruta_completa = os.path.join(
+                    self.dir_aprendices, archivo
+                )
+
+                # Asignación genérica basada en estructura de datos institucional
+                programa_base = (
+                    "Programa de Formación Titulada SENA"
+                )
+                centro_val = (
+                    "Centro de Comercio - "
+                    "SENA Regional Antioquia"
+                )
+                genero_val = "Masculino"
+
+                aprendices[nombre_limpio] = {
+                    "ruta": ruta_completa,
+                    "centro": centro_val,
+                    "programa": programa_base,
+                    "genero": genero_val,
+                }
+        return aprendices
+
+    def procesar_imagen(self, ruta_imagen: str):
+        """Ejecuta la inferencia YOLOv8 sobre la imagen del aprendiz."""
+        img = Image.open(ruta_imagen).convert("RGB")
+        resultados = list(self.model(img))
+        res_obj = resultados[0]
+        res_plot = res_obj.plot()  # type: ignore
+        img_rgb = Image.fromarray(
+            res_plot[..., ::-1]
+        )
+        return img_rgb, resultados

@@ -1,0 +1,14 @@
+# Entornos virtuales
+unir_env/
+env/
+venv/
+__pycache__/
+*.pyc
+
+# Caché de Streamlit y del sistema
+.streamlit/
+.DS_Store
+*.tmp
+
+# Datos temporales
+data/temp/
