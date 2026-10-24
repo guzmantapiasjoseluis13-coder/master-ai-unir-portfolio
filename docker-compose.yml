@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  master-ai-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: unir_master_ai_container
+    ports:
+      - "8501:8501"
+    environment:
+      - ENV=production
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
