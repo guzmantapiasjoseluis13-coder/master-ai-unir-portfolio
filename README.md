@@ -1,38 +1,29 @@
-# 🦅 Master AI Enterprise Portafolio | UNIR & Vision Fénix AI
+Título Sugerido:
+🚀 Construyendo el futuro de la Inteligencia Artificial con estándares de producción (Master AI - UNIR)
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/) [![Streamlit](https://img.shields.io/badge/streamlit-1.35%2B-red.svg)](https://streamlit.io/) [![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-orange.svg)](https://pytorch.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Cuerpo del Texto:
 
-Plataforma Enterprise de Visión Artificial, Analítica Documental y Sistemas Cognitivos desarrollada como parte de las actividades prácticas y Trabajo de Fin de Máster (TFM) del **Máster Universitario en Inteligencia Artificial** de la **Universidad Internacional de La Rioja (UNIR)**.
+Hola a todos 👋. Como parte de mi especialización en el Máster Universitario en Inteligencia Artificial de la UNIR, he estructurado y publicado mi portafolio técnico avanzado bajo un enfoque de ingeniería de nivel senior: Production-Ready AI.
 
+A diferencia de los entornos académicos tradicionales, este desarrollo integra arquitectura modular y flujos de despliegue corporativo reales:
 
-## 🏛️ Contexto Académico e Institucional
+🧠 Core de Inteligencia Artificial:
 
-- **Institución:** Universidad Internacional de La Rioja (UNIR) — Sede Central (Logroño, España) y Delegación (Bogotá, Colombia).
+Buscador Semántico y Conector Dinámico (PLN): Procesamiento de lenguaje natural y motores de recuperación vectorial basados en embeddings.
 
-- **Programa:** Máster Universitario en Inteligencia Artificial (60 ECTS).
+Visión Fénix (Visión Artificial): Sistemas de reconocimiento visual y clasificación aplicada.
 
-- **Asignatura Base:** Visión Artificial (6 ECTS).
+Analítica PDF & Modelado (Machine Learning): Extracción automatizada de datos y analítica predictiva.
 
-- **Entorno de Aplicación Práctica:** SENA Antioquia (Medellín, Colombia).
+Agentes Conversacionales (AgenticAI): Orquestación lógica para asistentes inteligentes.
 
+⚙️ Ingeniería de Producción y MLOps:
 
-## 🚀 Arquitectura del Sistema (Multipágina)
+Contenerización Profesional: Docker multi-etapa y orquestación local con Docker Compose para garantizar portabilidad absoluta.
 
-El monorepo está estructurado bajo principios de diseño limpio, modularidad y ausencia total de código quemado (*zero-hardcoding*):
+Pipelines de MLOps (CI/CD): Automatización de pruebas, verificación de código con linters PEP8 y validación de builds mediante GitHub Actions.
 
-```
-master\_ai\_unir\_portafolio/  
-├── app\_master\_inicio.py                 \# 🚀 Lanzador Maestro (Historia UNIR, Plan de Estudios y Perfil)  
-├── requirements.txt                     \# Dependencias científicas estandarizadas  
-├── data/  
-│   └── raw/  
-│       ├── oferta\_medellin.txt          \# Base RAG institucional  
-│       └── documentos\_pdf/              \# Normativa académica en PDF  
-├── src/  
-│   ├── vision\_uniformes/                \# Módulo 1: Auditoría de Uniformes, ROI, OCR y Mapas 3D  
-│   └── analitica\_pdf/                   \# Módulo 2: Parser y Extracción de Competencias PDF  
-└── pages/  
-    ├── 1\_🦅\_Vision\_Fenix\_SENA.py         \# Vista interactiva de auditoría óptica  
-    └── 2\_📄\_Parser\_Competencias\_PDF.py   \# Analítica de documentos institucionales
-```
+🔗 Puedes explorar el código fuente, la arquitectura modular y los manuales técnicos en mi repositorio público de GitHub:
+👉 [Enlace a tu repositorio: master-ai-unir-portfolio en guzmantapiasjoseluis13-coder]
 
+#ArtificialIntelligence #MachineLearning #MLOps #Docker #Python #UNIR #DeepLearning #SoftwareEngineering
