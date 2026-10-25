@@ -6,98 +6,171 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 class ConectorBlogSena:
-    """Conector 100% dinamico con etiquetado semantico por pestana."""
+    """Conector dinamico avanzado para explotar
+
+    todo el Blog del SENA.
+    """
 
     def __init__(self, blog_url="https://sena-comercio.blogspot.com/"):
         self.blog_url = blog_url
+        self.portal_nacional = "https://www.sena.edu.co"
+        self.regional_antioquia = (
+            "https://sena.edu.co/es-co/"
+            "regionales/ZonaAndina/"
+            "Paginas/antioquia.aspx"
+        )
 
     def extraer_entradas(self):
-        """Descubre y mapea dinamicamente las secciones del menu."""
+        """Extrae de forma masiva entradas y
+
+        contenido del blog institucional.
+        """
         corpus_dinamico = []
-        mapa_urls_claves = {}
+        urls_posts_descubiertas = set()
         headers = {
             "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; "
-                "Win64; x64) "
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
                 "Chrome/120.0.0.0 Safari/537.36"
             )
         }
 
-        keywords = [
-            "directorio",
-            "servicios",
-            "nosotros",
-            "aprendices",
-            "programas",
-            "portales",
-            "egresados",
-            "galeria",
-        ]
+        # 1. Exploracion masiva de la pagina principal
+        paginas_a_explorar = [self.blog_url]
+        for i in range(1, 4):
+            # Blogger usa parametro ?updated-max para paginar hacia atras
+            paginas_a_explorar.append(f"{self.blog_url.rstrip('/')}?page={i}")
 
-        try:
-            res = requests.get(self.blog_url, headers=headers, timeout=8)
-            if res.status_code == 200:
-                soup = BeautifulSoup(res.text, "html.parser")
-                for a in soup.find_all("a", href=True):
-                    t_link = a.get_text(strip=True).lower()
-                    h_raw = a.get("href", "")
-                    if isinstance(h_raw, list):
-                        h_str = " ".join(h_raw)
-                    else:
-                        h_str = str(h_raw or "")
-
-                    if h_str.startswith("/"):
-                        h_str = self.blog_url.rstrip("/") + h_str
-                    elif not h_str.startswith("http"):
-                        continue
-
-                    if "sena-comercio.blogspot.com" in h_str:
-                        for k in keywords:
-                            matched = k in t_link or k in h_str.lower()
-                            if matched and k not in mapa_urls_claves:
-                                mapa_urls_claves[k] = h_str
-        except Exception:
-            pass
-
-        # Si la raiz no esta mapeada, incluirla como respaldo general
-        if not mapa_urls_claves:
-            mapa_urls_claves["institucional"] = self.blog_url
-
-        # Extraer y etiquetar el contenido especifico
-        # de cada pestana descubierta
-        for clave, u_menu in mapa_urls_claves.items():
+        for p_url in paginas_a_explorar:
             try:
-                res_p = requests.get(u_menu, headers=headers, timeout=5)
+                res = requests.get(p_url, headers=headers, timeout=6)
+                if res.status_code == 200:
+                    soup = BeautifulSoup(res.text, "html.parser")
+                    for a in soup.find_all("a", href=True):
+                        h_raw = a.get("href", "")
+                        if not isinstance(h_raw, str):
+                            continue
+                        domain = "sena-comercio.blogspot.com"
+                        if domain in h_raw and "google.com" not in h_raw:
+                            patterns = ["/20", ".html", "/p/"]
+                            if any(p in h_raw for p in patterns):
+                                urls_posts_descubiertas.add(h_raw)
+            except Exception:
+                continue
+
+        # 2. Extraccion profunda de cada post descubierto
+        lista_urls = list(urls_posts_descubiertas)[:30]
+        urls_procesadas = set()
+
+        for u_post in lista_urls:
+            if u_post in urls_procesadas:
+                continue
+            urls_procesadas.add(u_post)
+
+            try:
+                res_p = requests.get(u_post, headers=headers, timeout=5)
                 if res_p.status_code == 200:
                     soup_p = BeautifulSoup(res_p.text, "html.parser")
+
+                    for el in soup_p(
+                        ["script", "style", "nav", "header", "footer", "aside"]
+                    ):
+                        el.decompose()
+
                     post_body = soup_p.find("div", class_="post-body")
                     if not post_body:
                         post_body = soup_p.find("div", class_="entry-content")
                     if not post_body:
+                        post_body = soup_p.find("div", class_="main")
+                    if not post_body:
                         post_body = soup_p
 
-                    txt_p = post_body.get_text(strip=True)
+                    textos_bloques = [
+                        elem.get_text(strip=True)
+                        for elem in post_body.find_all(
+                            ["p", "li", "td", "h1", "h2", "h3", "h4", "span"]
+                        )
+                        if len(elem.get_text(strip=True)) > 3
+                    ]
+
+                    txt_p = " ".join(textos_bloques)
+                    if len(txt_p) < 50:
+                        txt_p = post_body.get_text(separator=" ", strip=True)
+
                     if len(txt_p) > 20:
                         t_title = soup_p.find(["h1", "h2", "h3"])
-                        if t_title:
-                            titulo = t_title.get_text(strip=True)
-                        else:
-                            titulo = clave.capitalize()
+                        titulo = (
+                            t_title.get_text(strip=True)
+                            if t_title
+                            else "NOTICIAS Y EVENTOS SENA"
+                        )
 
-                        sub_txt = txt_p[:1200]
+                        sub_txt = txt_p[:3500]
                         inf_txt = (
-                            f"INFORMACION DE {clave.upper()} - "
-                            f"{titulo.upper()}. {sub_txt}"
+                            f"NOTICIA / HISTORIAL INSTITUCIONAL SENA - "
+                            f"{titulo.upper()}. CONTENIDO: {sub_txt}"
                         )
                         corpus_dinamico.append(
                             {
                                 "texto": inf_txt,
-                                "url": u_menu,
+                                "url": u_post,
                             }
                         )
             except Exception:
                 continue
+
+        # 3. Inyeccion de portales regionales y plataformas clave
+        corpus_dinamico.append(
+            {
+                "texto": (
+                    "PORTAL OFICIAL DE LA REGIONAL ANTIOQUIA SENA. "
+                    "INFORMACION INSTITUCIONAL, CONVOCATORIAS, NOTICIAS "
+                    "DE LA ZONA ANDINA Y PROGRAMAS DE FORMACION "
+                    "EN TODO EL DEPARTAMENTO DE ANTIOQUIA."
+                ),
+                "url": self.regional_antioquia,
+            }
+        )
+
+        corpus_dinamico.append(
+            {
+                "texto": (
+                    "BETOWA ES LA PLATAFORMA VIRTUAL Y DE SERVICIOS "
+                    "TECNOLOGICOS DEL SENA EN ANTIOQUIA PARA LA GESTION "
+                    "Y APOYO A LOS APRENDICES Y PROCESOS EDUCATIVOS."
+                ),
+                "url": "https://betowa.sena.edu.co/",
+            }
+        )
+
+        corpus_dinamico.append(
+            {
+                "texto": (
+                    "AGENCIA PUBLICA DE EMPLEO APE SENA. "
+                    "PLATAFORMA NACIONAL Y REGIONAL PARA LA INTERMEDIACION "
+                    "LABORAL, VACANTES DE EMPLEO, POSTULACIONES Y ORIENTACION "
+                    "OCUPACIONAL PARA LOS COLOMBIANOS Y APRENDICES."
+                ),
+                "url": "https://ape.sena.edu.co/",
+            }
+        )
+
+        corpus_dinamico.append(
+            {
+                "texto": (
+                    "ZAJUNA ES LA PLATAFORMA VIRTUAL "
+                    "OFICIAL DE APRENDIZAJE "
+                    "DEL SERVICIO NACIONAL DE APRENDIZAJE "
+                    "- SENA A NIVEL NACIONAL. "
+                    "ESTA HERRAMIENTA TECNOLOGICA ESTA DISPONIBLE "
+                    "PARA TODOS LOS APRENDICES DE COLOMBIA QUE DESEAN "
+                    "FORMARSE DE FORMA VIRTUAL, DESARROLLAR CURSOS, "
+                    "ACCEDER A CONTENIDOS ACADEMICOS Y GESTIONAR "
+                    "SUS PROCESOS DE FORMACION EN LINEA."
+                ),
+                "url": "https://zajuna.sena.edu.co/",
+            }
+        )
 
         if not corpus_dinamico:
             corpus_dinamico.append(
@@ -130,20 +203,29 @@ class BuscadorVectorial:
         """Carga perezosa de SentenceTransformer."""
         if self._model is None and self.modelo_disponible:
             try:
-                from sentence_transformers import (
-                    SentenceTransformer,
-                )
+                from sentence_transformers import SentenceTransformer
 
                 self._model = SentenceTransformer(self.model_name)
             except ImportError:
                 self.modelo_disponible = False
 
     def indexar_corpus(self, corpus_local=None, incluir_blog=True):
-        """Indiza corpus local e integra el blog."""
+        """Indiza corpus local, limpiando URLs, e integra fuentes SENA."""
         corpus_data = []
+        default_blog_url = "https://sena-comercio.blogspot.com/"
 
         if corpus_local:
-            corpus_data.extend(corpus_local)
+            for item in corpus_local:
+                url_limpia = item.get("url", default_blog_url)
+                if "google.com/search" in url_limpia:
+                    url_limpia = default_blog_url
+
+                corpus_data.append(
+                    {
+                        "texto": item.get("texto", ""),
+                        "url": url_limpia,
+                    }
+                )
 
         if incluir_blog:
             conector = ConectorBlogSena()
