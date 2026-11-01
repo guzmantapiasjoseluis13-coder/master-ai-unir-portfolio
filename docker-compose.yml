@@ -1,15 +1,46 @@
 version: '3.8'
 
 services:
-  master-ai-app:
+  rag-api:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: unir_master_ai_container
+      dockerfile: project_1_rag_sena/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+    networks:
+      - ai-network
+
+  tutor-app:
+    build:
+      context: .
+      dockerfile: project_2_tutor_inteligente/Dockerfile
     ports:
       - "8501:8501"
     environment:
-      - ENV=production
+      - DATABASE_URL=postgresql://postgres:password@postgres-db:5432/tutor_db
+    depends_on:
+      - postgres-db
+    networks:
+      - ai-network
+
+  postgres-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tutor_db
+    ports:
+      - "5432:5432"
     volumes:
-      - ./data:/app/data
-    restart: unless-stopped
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - ai-network
+
+networks:
+  ai-network:
+    driver: bridge
+
+volumes:
+  pgdata:
