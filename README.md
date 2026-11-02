@@ -1,31 +1,48 @@
-Título Sugerido:Enterprise AI Engineering: Del rigor académico a la producción escalable (Master AI - UNIR)
+# 🤖 Master AI Portfolio: Enterprise Multi-Agent & MLOps Platform
 
-Cuerpo de la Publicación:
+[![Docker](https://img.shields.io/badge/Docker-29.9-blue?logo=docker)](https://www.docker.com/)[cite: 8, 10]
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-326CE5?logo=kubernetes)](https://kubernetes.io/)[cite: 8]
+[![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python)](https://www.python.org/)[cite: 13, 14]
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.32-FF4B4B?logo=streamlit)](https://streamlit.io/)[cite: 15]
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql)](https://www.postgresql.org/)[cite: 12]
 
-🤖 En el panorama tecnológico actual de la Unión Europa y América Latina, la brecha entre un modelo experimental en Jupyter Notebook y una solución de Inteligencia Artificial lista para producción (Production-Ready) define la diferencia entre un prototipo y un software de grado empresarial.
+Repositorio profesional con la arquitectura integral, microservicios, pipelines de Data Engineering y modelos de Inteligencia Artificial desarrollados para el **Máster Universitario en Inteligencia Artificial (UNIR)**. La solución está diseñada bajo principios de código limpio (*Zero-Hardcode*), infraestructura contenerizada y manifiestos de despliegue orientados a entornos de producción Cloud-Native[cite: 8].
 
-Como parte de mi especialización en el Máster Universitario en Inteligencia Artificial de la UNIR, he diseñado, estructurado y desplegado mi portafolio técnico avanzado: master-ai-unir-portfolio.
+---
 
-Este desarrollo rompe con el enfoque puramente académico al integrar arquitectura de software limpia, diseño modular y ciclos de vida de MLOps corporativos:
+## 🏛️ Arquitectura de Software e Infraestructura
 
-🧠 Core Tecnológico e Inteligencia Artificial:
+La plataforma opera mediante un esquema de **microservicios contenerizados y aislados**, permitiendo escalabilidad horizontal, alta disponibilidad y reproducibilidad en entornos multi-cloud (AWS / Azure)[cite: 8].
 
-Búsqueda Semántica y Conector Dinámico (PLN): Procesamiento de lenguaje natural, recuperación vectorial de alta precisión (sentence-transformers) y web scraping dinámico avanzado.
+### 🛠️ Stack Tecnológico e Infraestructura
 
-Visión Fénix (Computer Vision): Sistemas de auditoría óptica, reconocimiento de patrones y clasificación aplicada.
+* **Core AI & ML:** LangGraph, Azure OpenAI, Scikit-Learn, Pandas, MLflow, ChromaDB.
+* **Data Engineering:** PySpark, Apache Kafka, PostgreSQL.
+* **Contenerización (OCI):** Construcción multicapa (*Multi-stage builds*) optimizada basada en `python:3.10-slim`[cite: 13, 14, 15].
+* **Orquestación Local:** `Docker Compose` administrando aislamiento de red puente (*bridge network*) y volúmenes persistentes[cite: 8, 12].
+* **Infraestructura como Código (IaC):** Manifiestos `Kubernetes` (`Deployment` y `Service`) declarativos en la carpeta `k8s/`[cite: 8].
 
-Analítica Documental y Modelado (Machine Learning): Extracción automatizada de normativas y analítica predictiva sobre corpus complejos.
+---
 
-Sistemas Multi-Agente (AgenticAI): Orquestación de lógica conversacional y flujos de decisión autónomos.
+## 🚀 Módulos del Portafolio
 
-⚙️ Ingeniería de Software y MLOps (Production Stack):
+| Módulo | Descripción | Stack Técnico | Estado |
+| :--- | :--- | :--- | :--- |
+| **1. RAG SENA** | Buscador semántico y extracción analítica sobre documentación normativa en PDF. | FastAPI, ChromaDB, OpenAI, Docker | 🟢 Producción |
+| **2. Tutor Inteligente** | Sistema conversacional multi-agente para orientación pedagógica personalizada. | LangGraph, Azure OpenAI, PostgreSQL | 🟢 Producción |
+| **3. Data Engineering** | Pipeline de procesamiento y transmisión de datos a gran escala. | Apache Spark, Kafka, Docker | 🟢 Producción |
+| **4. MLOps & Predicción** | Modelo supervisado de predicción de deserción con trazabilidad de experimentos. | Scikit-Learn, Pandas, MLflow | 🟢 Producción |
+| **5. Sistema Multi-Agente** | Arquitectura avanzada de agentes autónomos con herramientas integradas. | LangGraph, MCP, Vector DB, K8s | 🟢 Producción |
 
-Contenerización Avanzada: Despliegue empaquetado mediante Dockerfile multi-etapa y orquestación con docker-compose.yml para portabilidad absoluta.
+---
 
-Integración y Despliegue Continuo (CI/CD): Pipelines automatizados en GitHub Actions que ejecutan validación estricta de código (Linters PEP8) y compilación preventiva de contenedores en cada commit.
+## 💻 Guía de Despliegue y Ejecución
 
-La excelencia técnica no solo radica en el algoritmo, sino en la robustez de su infraestructura. Los invito a explorar la arquitectura modular, el código fuente y la documentación técnica en mi repositorio oficial:
+### Prerrequisitos
+* **Docker Desktop** (versión 24.0+ con el motor de contenedores activo)[cite: 5, 8, 10].
+* **Git**[cite: 8].
 
-🔗 Repositorio Público: [https://github.com/guzmantapiasjoseluis13-coder/master-ai-unir-portfolio](https://github.com/guzmantapiasjoseluis13-coder/master-ai-unir-portfolio)
-
-#ArtificialIntelligence #MachineLearning #MLOps #SoftwareEngineering #DeepLearning #Python #Docker #CI_CD #UNIR #TechLeadership
+### 1. Clonar el repositorio
+```bash
+git clone [https://github.com/guzmantapiasjoseluis13-coder/master-ai-unir-portfolio.git](https://github.com/guzmantapiasjoseluis13-coder/master-ai-unir-portfolio.git)
+cd master-ai-unir-portfolio
