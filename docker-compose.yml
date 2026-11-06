@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  rag-api:
+  backend_api:
     build:
       context: .
-      dockerfile: project_1_rag_sena/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     environment:
@@ -12,35 +12,20 @@ services:
     networks:
       - ai-network
 
-  tutor-app:
+  streamlit_frontend:
     build:
       context: .
-      dockerfile: project_2_tutor_inteligente/Dockerfile
+      dockerfile: Dockerfile
+    command: streamlit run pages/1_Vision_Fenix_SENA.py --server.port=8501 --server.address=0.0.0.0
     ports:
       - "8501:8501"
     environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres-db:5432/tutor_db
+      - API_BASE_URL=http://backend_api:8000
     depends_on:
-      - postgres-db
-    networks:
-      - ai-network
-
-  postgres-db:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: tutor_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      - backend_api
     networks:
       - ai-network
 
 networks:
   ai-network:
     driver: bridge
-
-volumes:
-  pgdata:
