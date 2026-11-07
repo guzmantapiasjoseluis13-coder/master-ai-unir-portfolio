@@ -1,6 +1,21 @@
 # flake8: noqa: E203
 import streamlit as st
 
+# Configuración inicial de la página principal
+st.set_page_config(
+    page_title="Master AI Portfolio | UNIR 2026",
+    page_icon="🏛️",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# --- BARRA LATERAL EJECUTIVA UNIFICADA ---
+st.sidebar.title("🏛️ Master AI Portfolio")
+st.sidebar.markdown("---")
+
+st.sidebar.markdown("**Navegación de Módulos:**")
+# Mantén los nombres limpios y profesionales
+# (Asegúrate de que los enlaces o selectores coincidan con tus archivos en pages/)
 st.set_page_config(
     page_title="TFM Enterprise Portfolio | Máster en IA - UNIR",
     page_icon="🎓",

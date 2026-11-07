@@ -7,11 +7,12 @@ st.set_page_config(
     page_title="Visión Fénix SENA - Enterprise AI",
     page_icon="🛡️",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 # URL base del microservicio FastAPI (orquestado vía Docker Compose)
 API_BASE_URL = "http://backend_api:8000"  # Cambiar a http://localhost:8000 si se ejecuta local sin docker
+
 
 def check_backend_health():
     """Valida la conectividad y estado del microservicio backend."""
@@ -21,14 +22,18 @@ def check_backend_health():
     except Exception:
         return False
 
+
 # --- BARRA LATERAL EJECUTIVA ---
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/8/84/SENA_Colombia_logo.svg", width=100)
+st.sidebar.image(
+    "https://upload.wikimedia.org/wikipedia/commons/8/84/SENA_Colombia_logo.svg",
+    width=100,
+)
 st.sidebar.title("Panel de Control")
 st.sidebar.markdown("---")
 
 menu_option = st.sidebar.radio(
     "Módulos del Sistema:",
-    ["📊 Auditoría y Analítica", "🔍 Consulta de Centros", "🛡️ Cumplimiento RGPD"]
+    ["📊 Auditoría y Analítica", "🔍 Consulta de Centros", "🛡️ Cumplimiento RGPD"],
 )
 
 st.sidebar.markdown("---")
@@ -50,24 +55,33 @@ else:
 # --- VISTA 1: ANALÍTICA ---
 if menu_option == "📊 Auditoría y Analítica":
     st.subheader("Métrica General de Rendimiento del Microservicio")
-    
+
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Latencia Promedio API", value="42 ms", delta="-12 ms")
-    col2.metric(label="Pruebas Unitarias Pytest", value="4 / 4 Verdes", delta="100% Exito")
+    col2.metric(
+        label="Pruebas Unitarias Pytest", value="4 / 4 Verdes", delta="100% Exito"
+    )
     col3.metric(label="Estándar Normativo", value="RGPD Art. 32", delta="Certificado")
 
     st.markdown("---")
     st.markdown("### 📈 Distribución de Carga Operativa")
-    chart_data = pd.DataFrame({
-        'Módulo': ['Inferencia YOLOv8', 'Consulta GIS Centros', 'Anonimización Biométrica', 'Validación Pydantic'],
-        'Eficiencia (%)': [98.5, 99.9, 97.2, 100.0]
-    })
-    st.bar_chart(chart_data.set_index('Módulo'))
+    chart_data = pd.DataFrame(
+        {
+            "Módulo": [
+                "Inferencia YOLOv8",
+                "Consulta GIS Centros",
+                "Anonimización Biométrica",
+                "Validación Pydantic",
+            ],
+            "Eficiencia (%)": [98.5, 99.9, 97.2, 100.0],
+        }
+    )
+    st.bar_chart(chart_data.set_index("Módulo"))
 
 # --- VISTA 2: CONSULTA DE CENTROS ---
 elif menu_option == "🔍 Consulta de Centros":
     st.subheader("Consulta Asíncrona de Centros de Formación (Antioquia)")
-    
+
     if st.button("Consultar Catálogo de Centros al Backend"):
         try:
             with st.spinner("Conectando con el microservicio FastAPI..."):
@@ -77,7 +91,9 @@ elif menu_option == "🔍 Consulta de Centros":
                     st.success("¡Datos recuperados exitosamente desde la API!")
                     st.json(data)
                 else:
-                    st.error(f"Error en la respuesta del servidor: {response.status_code}")
+                    st.error(
+                        f"Error en la respuesta del servidor: {response.status_code}"
+                    )
         except Exception as e:
             st.error(f"No fue posible establecer conexión con el backend: {e}")
 
@@ -89,4 +105,7 @@ else:
     - **Minimización de datos:** Los tensores de YOLOv8 procesan enmascaramientos efímeros sin almacenamiento persistente de PII (Personally Identifiable Information).
     - **Trazabilidad y Auditoría:** Cada solicitud al microservicio genera registros estructurados aptos para cumplimiento institucional.
     """)
-    st.image("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80", caption="Arquitectura segura y encriptada en contenedores Docker.")
+    st.image(
+        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80",
+        caption="Arquitectura segura y encriptada en contenedores Docker.",
+    )
