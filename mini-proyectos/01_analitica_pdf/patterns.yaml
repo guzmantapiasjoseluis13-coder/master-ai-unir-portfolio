@@ -1,0 +1,57 @@
+# ==============================================================================
+# CONFIGURACIÓN Y PATRONES DE REGEX - ANALÍTICA INTELIGENTE PDF (MINI-PRODUCTO 1)
+# Portafolio MLOps UNIR — Proyecto FÉNIX / SENA Colombia
+# Dominio D05: 05_proyectos/01_analitica_pdf/patterns.yaml
+# ==============================================================================
+
+institucionales:
+  denominacion_keywords:
+    - "DENOMINACIÓN"
+    - "DENOMINACION"
+    - "NOMBRE DEL PROGRAMA"
+    - "PROGRAMA DE FORMACIÓN"
+  regex_version: 'Versi[oó]n[:\s]*(\d+)'
+  regex_horas: '\b(\d{3,4})\s*horas?\b'
+  limite_paginas_encabezado: 5
+  candidatos_ocupacionales:
+    - "Cajeros de Servicios Financieros"
+    - "Auxiliares de servicios financieros"
+    - "Auxiliares de Información y Servicio al Cliente"
+    - "Desarrollador de Software / MLOps"
+    - "Analista de Datos e Inteligencia Artificial"
+    - "Consultor en Soluciones Agénticas y RAG"
+
+competencias:
+  encabezados:
+    - "4.3"
+    - "NOMBRE DE LA COMPETENCIA"
+    - "COMPETENCIA"
+  regex_limpieza_prefijo: '^(?:[0-9\.\-\s]+)'
+
+tablas_curriculares:
+  secciones:
+    rap:
+      - "4.5"
+      - "RESULTADO"
+      - "RESULTADOS DE APRENDIZAJE"
+    proceso:
+      - "4.6.1"
+      - "PROCESO"
+      - "CONOCIMIENTOS DE PROCESO"
+    saber:
+      - "4.6.2"
+      - "SABER"
+      - "CONOCIMIENTOS DEL SABER"
+    criterios:
+      - "4.7"
+      - "CRITERIOS"
+      - "CRITERIOS DE EVALUACIÓN"
+
+vision_computacional:
+  dpi_default: 150
+  clahe:
+    clip_limit: 2.0
+    tile_grid_size: [8, 8]
+  canny:
+    threshold1: 50
+    threshold2: 150

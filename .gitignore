@@ -1,14 +1,90 @@
-# Entornos virtuales
-unir_env/
-env/
-venv/
-__pycache__/
-*.pyc
+# 1\. SEGURIDAD Y CREDENCIALES 
+\# ============================
+.env
+.env.* 
+!.env.example
+*.pem
+*.key
+*.crt
 
-# Caché de Streamlit y del sistema
-.streamlit/
-.DS_Store
-*.tmp
+# 2\. IA, DEEP LEARNING Y ARTEFACTOS DE ENTRENAMIENTO
+\# ===================================================
+\# Pesos de modelos y checkpoints
+\*.pt
+\*.pth
+\*.onnx
+\*.safetensors
+\*.bin
+\*.ckpt
+\*.weights
+\*.h5
+\*.tflite
 
-# Datos temporales
-data/temp/
+# Logs y métricas de experimentos (YOLO, WandB, MLflow)
+runs/ 
+wandb/ 
+mlruns/ 
+lightning\_logs/
+.catboost\_info/
+
+# 3\. DATOS Y DATASETS (Usar DVC o almacenamiento externo para datos pesados) 
+# ============================================================================ 
+data/raw/\* 
+!data/raw/.gitkeep 
+data/processed/\* 
+!data/processed/.gitkeep 
+datasets/ 
+*.parquet 
+*.feather 
+*.sqlite3
+
+# 4\. PYTHON, PRUEBAS Y MLOPS 
+# ============================= 
+\_\_pycache\_\_/ 
+\*.py[cod] 
+\*$py.class 
+.pytest\_cache/ 
+.mypy\_cache/ 
+.ruff\_cache/ 
+.coverage 
+.coverage.\* 
+htmlcov/ 
+.benchmarks/ 
+
+# Entornos virtuales 
+.venv/ 
+venv/ 
+ENV/ 
+env/ 
+
+# Empaquetado y distribución 
+build/ 
+dist/ 
+\*.egg-info/
+
+# 5\. JUPYTER NOTEBOOKS 
+# ======================
+.ipynb\_checkpoints/ 
+\*-checkpoint.ipynb
+
+# 6\. COMPILACIÓN DE INVESTIGACIÓN Y TFM (LaTeX / Pandoc) 
+# ========================================================
+\*.aux 
+\*.fdb\_latexmk 
+\*.fls 
+\*.log 
+\*.synctex.gz 
+\*.toc 
+\*.bbl 
+\*.blg 
+\*.out
+
+# 7\. SISTEMA OPERATIVO E IDE 
+# ============================ 
+.DS\_Store 
+Thumbs.db 
+
+# VS Code 
+.vscode/\* 
+!.vscode/extensions.json 
+!.vscode/settings.json

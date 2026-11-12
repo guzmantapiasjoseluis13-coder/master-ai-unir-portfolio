@@ -1,40 +1,38 @@
-# --- ETAPA 1: Construcción de dependencias ---
-FROM python:3.10-slim AS builder
+# ETAPA 1: Builder (Compilación de dependencias)
+FROM python:3.12-slim AS builder
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
 
 WORKDIR /app
 
-# Instalar dependencias del sistema requeridas para compilación
+# Instalar herramientas de compilación (necesarias para algunas librerías)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    curl \
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar e instalar dependencias de Python en directorio de usuario
 COPY requirements.txt .
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# --- ETAPA 2: Imagen Final Optimizada ---
-FROM python:3.10-slim
+# Crear wheels o entorno virtual independiente
+RUN python -m pip install --upgrade pip \
+    && pip install --user -r requirements.txt
+
+# ETAPA 2: Runtime (Imagen final ligera)
+FROM python:3.12-slim AS runtime
 
 WORKDIR /app
 
-# Variables de entorno para Streamlit y Python
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PORT=8501
+# Copiar las dependencias instaladas desde la etapa builder
+COPY --from=builder /root/.local /root/.local
+ENV PATH=/root/.local/bin:$PATH
 
-# Copiar librerías instaladas desde la etapa builder
-COPY --from=builder /install /usr/local
+# Copiar el código fuente
+COPY . .
 
-# Copiar la estructura de código fuente
-COPY . /app
+# Exponer el puerto del backend (FastAPI)
+EXPOSE 8000
 
-# Puerto expuesto para Streamlit
-EXPOSE 8501
-
-# Comprobación de estado del contenedor (Healthcheck)
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-  CMD curl --fail http://localhost:8501/_stcore/health || exit 1
-
-# Comando de arranque del servidor
-ENTRYPOINT ["streamlit", "run", "app_master_inicio.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Comando por defecto
+CMD ["uvicorn", "tfm.backend_api.main:app", "--host", "0.0.0.0", "--port", "8000"]

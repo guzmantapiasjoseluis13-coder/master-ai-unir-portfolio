@@ -1,0 +1,35 @@
+\# 1\. TESTING &amp; CODE COVERAGE (QA) 
+# ======================================
+pytest>=8.0.0 
+pytest-cov>=4.1.0 
+pytest-asyncio>=0.23.0 
+pytest-mock>=3.12.0 
+httpx>=0.27.0 
+# Requerido para probar endpoints con FastAPI TestClient
+
+\# 2\. LINTING, FORMATTING &amp; STATIC TYPE CHECKING 
+# ===================================================== 
+ruff>=0.3.0 # Reemplaza flake8, black e isort en una herramienta ultrarrápida 
+mypy>=1.9.0 # Verificación estática de tipos 
+types-requests>=2.31.0 # Stubs de tipos para mypy 
+types-pillow>=10.2.0
+
+\# 3\. GIT HOOKS &amp; GOBERNANZA DE CÓDIGO 
+# ============================================ 
+pre-commit>=3.6.0 # Automatiza la ejecución de ruff y mypy antes de cada git commit
+
+\# 4\. SEGURIDAD Y AUDITORÍA DE DEPENDENCIAS (Security by Design) 
+# ================================================================ 
+bandit>=1.7.8 # Análisis estático de seguridad en código Python 
+pip-audit>=2.7.0 # Auditoría de dependencias en busca de CVEs conocidos
+
+\# 5\. DESARROLLO INTERACTIVO Y PROTOTIPADO 
+# =========================================== 
+ipykernel>=6.29.0 # Ejecución de Jupyter Notebooks dentro de VS Code 
+jupyterlab>=4.1.0 
+memory-profiler>=0.61.0 # Medición del consumo de RAM en cargas de modelos de IA
+
+\# 6\. DOCUMENTACIÓN TÉCNICA 
+# =========================== 
+mkdocs>=1.5.0 # Generador de sitios de documentación en Markdown 
+mkdocs-material>=9.5.0 # Tema profesional para publicar la documentación del portafolio
