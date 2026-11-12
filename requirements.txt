@@ -1,10 +1,39 @@
-streamlit>=1.32.0
-numpy>=1.26.0
-pandas>=2.0.0
+# 1. CORE DATA SCIENCE & MACHINE LEARNING
+numpy>=2.0.0
+pandas>=2.2.0
 scikit-learn>=1.4.0
+pillow>=10.2.0
+
+# 2. DEEP LEARNING & COMPUTER VISION (Vision Aprendices / YOLOv8)
+torch>=2.2.0
+torchvision>=0.17.0
+ultralytics>=8.1.0
+opencv-python-headless>=4.9.0
+
+# 3. NLP, RAG & AGENTIC AI (Proyecto FÉNIX & PLN Chat)
 sentence-transformers>=2.5.0
+langchain>=0.1.14
+langchain-community>=0.0.31
+langgraph>=0.0.30
+crewai>=0.28.0
+qdrant-client>=1.8.0
+pypdf>=4.1.0
 beautifulsoup4>=4.12.0
 requests>=2.31.0
-pillow>=10.0.0
+
+# 4. BACKEND API & FRONTEND
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+pydantic>=2.6.0
+streamlit>=1.32.0
+
+# 5. MLOPS & GESTIÓN DE EXPERIMENTOS
 mlflow>=2.11.0
 dvc>=3.48.0
+
+# 6. PRUEBAS AUTOMATIZADAS Y CALIDAD DE CÓDIGO (DEV / CI-CD)
+pytest>=8.0.0
+pytest-cov>=4.1.0
+httpx>=0.27.0
+ruff>=0.3.0
+mypy>=1.9.0

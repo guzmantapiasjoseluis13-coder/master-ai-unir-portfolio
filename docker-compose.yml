@@ -1,31 +1,80 @@
-version: '3.8'
-
 services:
+  # 1. BASE DE DATOS VECTORIAL (Esencial para RAG y Proyecto FÉNIX)
+  qdrant_db:
+    image: qdrant/qdrant:v1.9.0
+    container_name: fenix_qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - ai-network
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 1 bash -c 'cat < /dev/null > /dev/tcp/localhost/6333' || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  # 2. BACKEND API (FastAPI + Uvicorn)
   backend_api:
     build:
       context: .
       dockerfile: Dockerfile
+      target: runtime
+    container_name: fenix_backend_api
+    restart: unless-stopped
+    command: uvicorn tfm.backend_api.main:app --host 0.0.0.0 --port 8000 --reload
+    # ELIMINADO EL VOLUMEN DEL ESCRITORIO. El código ya está dentro de la imagen.
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
-      - ENVIRONMENT=production
+      ENVIRONMENT: development
+      PYTHONPATH: /app
+      QDRANT_HOST: qdrant_db
+      QDRANT_PORT: 6333
     networks:
       - ai-network
+    depends_on:
+      qdrant_db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # 3. FRONTEND (Streamlit)
   streamlit_frontend:
     build:
       context: .
       dockerfile: Dockerfile
-    command: streamlit run tfm/frontend_streamlit/app_master_inicio.py --server.port=8501 --server.address=0.0.0.0
+      target: runtime
+    container_name: fenix_streamlit_frontend
+    restart: unless-stopped
+    command: streamlit run tfm/frontend_streamlit/app_master_inicio.py --server.port 8501 --server.address 0.0.0.0
+    # ELIMINADO EL VOLUMEN DEL ESCRITORIO. El código ya está dentro de la imagen.
     ports:
       - "8501:8501"
+    env_file:
+      - .env
     environment:
-      - API_BASE_URL=http://backend_api:8000
-    depends_on:
-      - backend_api
+      API_BASE_URL: http://backend_api:8000
+      PYTHONPATH: /app
     networks:
       - ai-network
+    depends_on:
+      backend_api:
+        condition: service_healthy
 
 networks:
   ai-network:
     driver: bridge
+
+volumes:
+  qdrant_data:
+    driver: local
